@@ -9,11 +9,6 @@ import pini.mattia.coachtimer.model.trainingsession.TrainingSession
 import java.time.LocalDateTime
 import kotlin.math.roundToInt
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 class TrainingSessionTest {
     private val trainingSessionUnderTest = TrainingSession(
         LocalDateTime.now(),

@@ -27,7 +27,8 @@ object Plugins {
 object SupportLibs {
     const val coreKtx = "androidx.core:core-ktx:1.9.0"
     const val appCompat = "androidx.appcompat:appcompat:1.5.1"
-    const val lifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
+    const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+    const val lifecycleViewModelCompose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
 }
 
 object FrameworkLibs {
@@ -49,6 +50,7 @@ object FrameworkLibs {
         const val daggerHiltCompiler = "com.google.dagger:hilt-compiler:${Versions.hilt}"
         const val androidxHiltCompiler = "androidx.hilt:hilt-compiler:1.0.0"
         const val daggerHiltTesting = "com.google.dagger:hilt-android-testing:${Versions.hilt}"
+        const val hiltCompose = "androidx.hilt:hilt-navigation-compose:1.0.0"
     }
 }
 
@@ -57,6 +59,8 @@ object TestLibs {
     const val junitExt = "androidx.test.ext:junit:1.1.3"
     const val espresso = "androidx.test.espresso:espresso-core:3.4.0"
     const val junitCompose = "androidx.compose.ui:ui-test-junit4:${FrameworkLibs.Compose.version}"
+    const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
+    const val mockito = "org.mockito.kotlin:mockito-kotlin:4.0.0"
 }
 
 object ExternalLibs {
@@ -76,5 +80,9 @@ object ExternalLibs {
         const val runtime = "androidx.work:work-runtime-ktx:$version"
         const val testing = "androidx.work:work-testing:$version"
         const val hiltWork = "androidx.hilt:hilt-work:1.0.0"
+    }
+
+    object Landscapist {
+        const val glide = "com.github.skydoves:landscapist-glide:2.0.3"
     }
 }

@@ -2,6 +2,11 @@ package pini.mattia.coachtimer.data.player
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class PlayersResponse(
+    val results: List<PlayerDTO>
+)
+
+@Serializable
 data class PlayerDTO(
     val name: PlayerName,
     val picture: PictureDTO
@@ -11,7 +16,7 @@ data class PlayerDTO(
 data class PlayerName(
     val title: String,
     val first: String,
-    val second: String
+    val last: String
 )
 
 @Serializable

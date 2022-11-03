@@ -13,7 +13,7 @@ class PlayerMapper @Inject constructor() : Mapper<Player, PlayerDTO> {
         return Player(
             objectToMap.name.title,
             objectToMap.name.first,
-            objectToMap.name.second,
+            objectToMap.name.last,
             Picture(
                 objectToMap.picture.thumbnail,
                 objectToMap.picture.large,

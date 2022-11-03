@@ -1,5 +1,7 @@
 package pini.mattia.coachtimer.data.player
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import pini.mattia.coachtimer.model.player.Player
 import pini.mattia.coachtimer.model.player.PlayersRepository
 import javax.inject.Inject
@@ -9,11 +11,11 @@ class PlayerRepositoryImpl @Inject constructor(
     private val playerMapper: PlayerMapper
 ) : PlayersRepository {
     override suspend fun getPlayers(): Result<List<Player>> {
-        val players = playerService.getPlayers().getOrNull()
-        return players?.let {
-            Result.success(
-                players.map { playerDto -> playerMapper.mapTo(playerDto) }
-            )
-        } ?: Result.failure(RuntimeException())
+        return withContext(Dispatchers.IO) {
+            kotlin.runCatching {
+                val playersResponse = playerService.getPlayers().getOrThrow()
+                playersResponse.results.map { playerDto -> playerMapper.mapTo(playerDto) }
+            }
+        }
     }
 }

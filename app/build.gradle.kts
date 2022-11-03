@@ -42,6 +42,14 @@ android {
         kotlinCompilerExtensionVersion = FrameworkLibs.Compose.compilerVersion
     }
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+
     // Allow references to generated code
     kapt {
         correctErrorTypes = true
@@ -56,25 +64,29 @@ dependencies {
 
     // Base
     implementation(SupportLibs.coreKtx)
-    implementation(SupportLibs.lifecycleKtx)
+    implementation(SupportLibs.lifecycleViewModel)
+    implementation(SupportLibs.lifecycleViewModelCompose)
     implementation(SupportLibs.appCompat)
 
     // DI
     implementation(FrameworkLibs.Dagger.daggerHilt)
     kapt(FrameworkLibs.Dagger.daggerHiltAndroidCompiler)
+    implementation(FrameworkLibs.Dagger.hiltCompose)
 
     // UI
     implementation(FrameworkLibs.Compose.composeUi)
     implementation(FrameworkLibs.Compose.composeMaterial)
     implementation(FrameworkLibs.Compose.composePreview)
     implementation(FrameworkLibs.Compose.composeActivity)
+    implementation(FrameworkLibs.Compose.composeUiTooling)
 
     // Tests
     testImplementation(TestLibs.junit)
+    testImplementation(TestLibs.coroutinesTest)
+    testImplementation(TestLibs.mockito)
     androidTestImplementation(TestLibs.junitExt)
     androidTestImplementation(TestLibs.espresso)
     androidTestImplementation(TestLibs.junitCompose)
-    debugImplementation(FrameworkLibs.Compose.composeUiTooling)
 
     implementation(ExternalLibs.WorkManager.hiltWork)
     kapt(FrameworkLibs.Dagger.androidxHiltCompiler)
@@ -86,4 +98,5 @@ dependencies {
     implementation(ExternalLibs.Ktor.contentNegotiation)
 
     implementation(ExternalLibs.kotlinxSerialization)
+    implementation(ExternalLibs.Landscapist.glide)
 }
