@@ -79,6 +79,7 @@ dependencies {
     implementation(FrameworkLibs.Compose.composePreview)
     implementation(FrameworkLibs.Compose.composeActivity)
     implementation(FrameworkLibs.Compose.composeUiTooling)
+    implementation(FrameworkLibs.Compose.composeNavigation)
 
     // Tests
     testImplementation(TestLibs.junit)
@@ -88,8 +89,8 @@ dependencies {
     androidTestImplementation(TestLibs.espresso)
     androidTestImplementation(TestLibs.junitCompose)
 
-    implementation(ExternalLibs.WorkManager.hiltWork)
-    kapt(FrameworkLibs.Dagger.androidxHiltCompiler)
+//    implementation(ExternalLibs.WorkManager.hiltWork)
+//    kapt(FrameworkLibs.Dagger.androidxHiltCompiler)
 
     // Ktor
     implementation(ExternalLibs.Ktor.core)

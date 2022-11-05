@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Coach Timer</string>
+    <string name="icon_close_description">Close icon</string>
+    <string name="input_dialog_title">Session settings</string>
+    <string name="selected_player">Selected player:</string>
+    <string name="input_lap_distance">Insert lap distance(meters):</string>
+    <string name="input_start_session">Start session!</string>
 </resources>

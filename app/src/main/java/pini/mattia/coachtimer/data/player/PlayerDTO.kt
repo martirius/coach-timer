@@ -1,4 +1,5 @@
 package pini.mattia.coachtimer.data.player
+
 import kotlinx.serialization.Serializable
 
 @Serializable

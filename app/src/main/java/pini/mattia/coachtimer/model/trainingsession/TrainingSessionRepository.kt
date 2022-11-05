@@ -6,8 +6,4 @@ interface TrainingSessionRepository {
     fun getTrainingSession(): Flow<TrainingSession>
 
     suspend fun addTrainingSession(trainingSession: TrainingSession)
-
-    fun getOngoingSession(): Flow<TrainingSession>
-
-    suspend fun updateOngoingSession(onGoingSession: TrainingSession)
 }
