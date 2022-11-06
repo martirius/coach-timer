@@ -35,8 +35,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -58,9 +60,18 @@ import pini.mattia.coachtimer.ui.theme.CoachTimerTheme
 
 @Composable
 fun MainScreen(navController: NavController) {
+    val launchedEffectKey = remember {
+        "key"
+    }
     val viewModel: MainScreenViewModel = hiltViewModel()
     // waiting for collectAsStateWithLifecycle to comes out of alpha
     val viewState by viewModel.viewState.collectAsState()
+
+    LaunchedEffect(key1 = launchedEffectKey) {
+        viewModel.navigation.collect {
+            navController.navigate(it)
+        }
+    }
 
     CoachTimerTheme {
         Scaffold(
@@ -93,9 +104,7 @@ fun MainScreen(navController: NavController) {
             if (viewState.inputDialogState.showInputDialog && viewState.selectedPlayer != null) {
                 InputDialog(
                     selectedPlayer = viewState.selectedPlayer!!,
-                    onStartPressed = {
-                        // navigate to session screen
-                    },
+                    onStartPressed = viewModel::startSession,
                     onCloseDialog = viewModel::closeInputDialogPressed,
                     lapDistanceValue = viewState.inputDialogState.sessionLapDistance,
                     isDatavalid = viewState.inputDialogState.dataValid,
@@ -108,8 +117,8 @@ fun MainScreen(navController: NavController) {
 
 @Composable
 fun PlayersList(players: List<Player>, selectedPlayer: Player?, onPlayerSelected: (player: Player) -> Unit) {
-    Column {
-        Text(text = "Select your player:")
+    Column(modifier = Modifier.padding(horizontal = 24.dp)) {
+        Text(text = stringResource(R.string.select_player))
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(vertical = 8.dp),

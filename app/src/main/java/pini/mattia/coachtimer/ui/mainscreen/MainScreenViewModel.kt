@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import pini.mattia.coachtimer.Destinations
 import pini.mattia.coachtimer.model.player.Player
 import pini.mattia.coachtimer.model.player.PlayersRepository
 import javax.inject.Inject
@@ -90,6 +91,19 @@ class MainScreenViewModel @Inject constructor(
                 )
             )
         )
+    }
+
+    fun startSession() {
+        viewState.value.selectedPlayer?.let { player ->
+            viewModelScope.launch {
+                _navigation.emit(
+                    Destinations.prepareSessionScreenNavigation(
+                        player.getPlayerId(),
+                        viewState.value.inputDialogState.sessionLapDistance.toInt()
+                    )
+                )
+            }
+        }
     }
 
     data class ViewState(

@@ -5,4 +5,5 @@
     <string name="selected_player">Selected player:</string>
     <string name="input_lap_distance">Insert lap distance(meters):</string>
     <string name="input_start_session">Start session!</string>
+    <string name="select_player">Select your player:</string>
 </resources>

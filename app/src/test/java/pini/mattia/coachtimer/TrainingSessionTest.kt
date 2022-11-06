@@ -6,12 +6,13 @@ import pini.mattia.coachtimer.model.player.Picture
 import pini.mattia.coachtimer.model.player.Player
 import pini.mattia.coachtimer.model.trainingsession.Lap
 import pini.mattia.coachtimer.model.trainingsession.TrainingSession
-import java.time.LocalDateTime
+import java.util.Date
 import kotlin.math.roundToInt
 
 class TrainingSessionTest {
     private val trainingSessionUnderTest = TrainingSession(
-        LocalDateTime.now(),
+        Date().time,
+        45000,
         30,
         Player("Mr", "Sir", "Pounce", Picture("fake", "fake", "fake")),
         listOf(
