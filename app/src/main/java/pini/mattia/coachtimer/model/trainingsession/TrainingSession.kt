@@ -18,7 +18,7 @@ data class TrainingSession(
     /**
      * Return average time expressed in milliseconds
      */
-    fun calculateAverageLapTime(): Int = if (laps.isNotEmpty()) laps.sumOf { it.lapTime } / laps.size else 0
+    fun calculateAverageLapTime(): Long = if (laps.isNotEmpty()) laps.sumOf { it.lapTime } / laps.size else 0
 
     /**
      *  Return the average speed expressed in m/s
@@ -34,15 +34,15 @@ data class TrainingSession(
      * Returns max speed of the session
      */
     fun calculateMaxSpeed(): Double {
-        return laps.maxOf {
+        return laps.maxOfOrNull {
             calculateSpeed(
                 lapDistance,
                 it.lapTime.toDouble() / 1000
             )
-        }
+        } ?: 0.0
     }
 
     private fun calculateSpeed(distance: Int, timeInSeconds: Double): Double = distance / timeInSeconds
 }
 
-data class Lap(val lapTime: Int)
+data class Lap(val lapTime: Long)

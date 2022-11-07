@@ -3,6 +3,7 @@ package pini.mattia.coachtimer.ui.mainscreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -96,10 +97,21 @@ class MainScreenViewModel @Inject constructor(
     fun startSession() {
         viewState.value.selectedPlayer?.let { player ->
             viewModelScope.launch {
+                // navigate to session screen
                 _navigation.emit(
                     Destinations.prepareSessionScreenNavigation(
                         player.getPlayerId(),
                         viewState.value.inputDialogState.sessionLapDistance.toInt()
+                    )
+                )
+                // add some delay to wait for navigation
+                delay(500)
+                // reset home screen
+                _viewState.emit(
+                    viewState.value.copy(
+                        status = Status.SUCCESS,
+                        selectedPlayer = null,
+                        inputDialogState = ViewState.InputDialogState()
                     )
                 )
             }

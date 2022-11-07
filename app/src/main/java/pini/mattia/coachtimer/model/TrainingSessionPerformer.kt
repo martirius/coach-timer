@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import pini.mattia.coachtimer.model.player.Player
 import pini.mattia.coachtimer.model.trainingsession.Lap
 import pini.mattia.coachtimer.model.trainingsession.TrainingSession
-import java.util.Date
+import javax.inject.Inject
 
 /**
  * Class responsible of the stopwatch and the session
@@ -17,57 +17,72 @@ import java.util.Date
  * The trick here is to keep a second timer between laps to calculate directly the time of each lap
  * The session can last at least 90 minutes
  */
-class TrainingSessionPerformer(
-    player: Player,
-    lapDistance: Int
+class TrainingSessionPerformer @Inject constructor(
+    private val timeRetriever: TimeRetriever
 ) {
-    private val _onGoingTrainingSession = MutableStateFlow(
-        TrainingSession(
-            Date().time,
-            0,
-            lapDistance,
-            player,
-            emptyList()
-        )
+    private val _onGoingTrainingSession: MutableStateFlow<TrainingSession?> = MutableStateFlow(
+        null
     )
-    val onGoingTrainingSession: StateFlow<TrainingSession>
+    val onGoingTrainingSession: StateFlow<TrainingSession?>
         get() = _onGoingTrainingSession
 
-    private var started: Boolean = false
-    private var lapTimeCounter = 0
+    private var lastLapMillis = 0L
 
     private lateinit var watchJob: Job
+    private var sessionStatus = SessionStatus.UNITIALIZED
+
+    fun initializeSession(
+        player: Player,
+        lapDistance: Int
+    ) {
+        _onGoingTrainingSession.tryEmit(
+            TrainingSession(
+                timeRetriever.getCurrentTimeMillis(),
+                0,
+                lapDistance,
+                player,
+                emptyList()
+            )
+        )
+        sessionStatus = SessionStatus.INITIALIZED
+    }
 
     fun start(coroutineScope: CoroutineScope) {
-        if (!started) {
-            started = true
+        if (sessionStatus == SessionStatus.INITIALIZED) {
+            sessionStatus = SessionStatus.PERFORMING
             watchJob = coroutineScope.launch {
-                while (_onGoingTrainingSession.value.totalElapsedTime < MAX_TIMER_TIME)
-                    _onGoingTrainingSession.emit(
-                        _onGoingTrainingSession.value.copy(
-                            totalElapsedTime = _onGoingTrainingSession.value.totalElapsedTime + 1
+                val startedTimeMillis: Long = timeRetriever.getCurrentTimeMillis()
+                lastLapMillis = startedTimeMillis
+                while (timeRetriever.getCurrentTimeMillis() - startedTimeMillis < MAX_TIMER_TIME) {
+                    _onGoingTrainingSession.tryEmit(
+                        _onGoingTrainingSession.value?.copy(
+                            totalElapsedTime = timeRetriever.getCurrentTimeMillis() - startedTimeMillis
                         )
                     )
-                lapTimeCounter += 1
-                delay(1)
+                    delay(1) // let context switch
+                }
             }
         }
     }
 
     fun addLap() {
-        val currentLapTime = lapTimeCounter
-        val trainingSessions = _onGoingTrainingSession.value
-        val laps = trainingSessions.laps.toMutableList().apply { add(Lap(currentLapTime)) }
-        _onGoingTrainingSession.tryEmit(
-            _onGoingTrainingSession.value.copy(
-                laps = laps
-            )
-        )
-        lapTimeCounter = 0
+        if (sessionStatus == SessionStatus.PERFORMING) {
+            _onGoingTrainingSession.value?.let { trainingSession ->
+                val currentLapTime = timeRetriever.getCurrentTimeMillis() - lastLapMillis
+                lastLapMillis = timeRetriever.getCurrentTimeMillis()
+                val laps = trainingSession.laps.toMutableList().apply { add(Lap(currentLapTime)) }
+                _onGoingTrainingSession.tryEmit(
+                    trainingSession.copy(
+                        laps = laps
+                    )
+                )
+            }
+        }
     }
 
     fun stop() {
-        if (started) {
+        if (sessionStatus == SessionStatus.PERFORMING) {
+            sessionStatus = SessionStatus.STOPPED
             watchJob.cancel()
         }
     }
@@ -75,5 +90,12 @@ class TrainingSessionPerformer(
     companion object {
         // max timer is 90 minutes
         private const val MAX_TIMER_TIME = 90 * 60 * 1000
+    }
+
+    enum class SessionStatus {
+        UNITIALIZED,
+        INITIALIZED,
+        PERFORMING,
+        STOPPED
     }
 }

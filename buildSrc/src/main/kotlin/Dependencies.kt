@@ -42,6 +42,7 @@ object FrameworkLibs {
         const val composeActivity = "androidx.activity:activity-compose:1.6.0"
         const val composeUiTooling = "androidx.compose.ui:ui-tooling:$version"
         const val composeNavigation = "androidx.navigation:navigation-compose:2.5.1"
+        const val composeAnimation = "androidx.compose.animation:animation:1.3.0"
     }
 
     object Dagger {

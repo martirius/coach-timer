@@ -80,6 +80,7 @@ dependencies {
     implementation(FrameworkLibs.Compose.composeActivity)
     implementation(FrameworkLibs.Compose.composeUiTooling)
     implementation(FrameworkLibs.Compose.composeNavigation)
+    implementation(FrameworkLibs.Compose.composeAnimation)
 
     // Tests
     testImplementation(TestLibs.junit)

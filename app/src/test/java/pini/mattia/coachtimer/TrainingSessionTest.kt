@@ -26,7 +26,7 @@ class TrainingSessionTest {
 
     @Test
     fun calculate_average_time_correct() {
-        assertTrue(trainingSessionUnderTest.calculateAverageLapTime() == 6000)
+        assertTrue(trainingSessionUnderTest.calculateAverageLapTime() == 6000L)
     }
 
     @Test
@@ -45,5 +45,20 @@ class TrainingSessionTest {
     fun calculate_max_speed_correct() {
         val maxSpeed = trainingSessionUnderTest.calculateMaxSpeed()
         assertTrue(maxSpeed == 6.0)
+    }
+
+    @Test
+    fun when_session_to_start_all_performances_are_zero() {
+        val trainingSession = TrainingSession(
+            Date().time,
+            0,
+            30,
+            Player("Mr", "Sir", "Pounce", Picture("fake", "fake", "fake")),
+            emptyList()
+        )
+        assert(trainingSession.calculateAverageLapTime() == 0L)
+        assert(trainingSession.calculateAverageSpeed() == 0.0)
+        assert(trainingSession.calculateMaxSpeed() == 0.0)
+        assert(trainingSession.getNumberOfLaps() == 0)
     }
 }

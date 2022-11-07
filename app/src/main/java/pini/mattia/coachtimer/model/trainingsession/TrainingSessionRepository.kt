@@ -3,7 +3,7 @@ package pini.mattia.coachtimer.model.trainingsession
 import kotlinx.coroutines.flow.Flow
 
 interface TrainingSessionRepository {
-    fun getTrainingSession(): Flow<TrainingSession>
+    fun getTrainingSessions(): Flow<List<TrainingSession>>
 
     suspend fun addTrainingSession(trainingSession: TrainingSession)
 }
