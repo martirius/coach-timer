@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 import pini.mattia.coachtimer.data.player.PlayerDTO
 
 @Entity(tableName = "training_session")
+@kotlinx.serialization.Serializable
 data class TrainingSessionDTO(
     @PrimaryKey
     val sessionDateMillis: Long,

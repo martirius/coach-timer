@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,4 +18,7 @@ interface TrainingSessionDao {
 
     @Query("SELECT * FROM training_session WHERE NOT(isUploaded)")
     suspend fun getSessionNotUploaded(): List<TrainingSessionDTO>
+
+    @Update
+    suspend fun updateTrainingSession(trainingSessionDTO: TrainingSessionDTO)
 }

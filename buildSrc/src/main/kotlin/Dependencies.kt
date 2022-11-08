@@ -84,7 +84,6 @@ object ExternalLibs {
     object WorkManager {
         private const val version = "2.7.1"
         const val runtime = "androidx.work:work-runtime-ktx:$version"
-        const val testing = "androidx.work:work-testing:$version"
         const val hiltWork = "androidx.hilt:hilt-work:1.0.0"
     }
 

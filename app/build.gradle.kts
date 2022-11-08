@@ -92,8 +92,9 @@ dependencies {
     androidTestImplementation(TestLibs.espresso)
     androidTestImplementation(TestLibs.junitCompose)
 
-//    implementation(ExternalLibs.WorkManager.hiltWork)
-//    kapt(FrameworkLibs.Dagger.androidxHiltCompiler)
+    implementation(ExternalLibs.WorkManager.hiltWork)
+    kapt(FrameworkLibs.Dagger.androidxHiltCompiler)
+    implementation(ExternalLibs.WorkManager.runtime)
 
     // Ktor
     implementation(ExternalLibs.Ktor.core)

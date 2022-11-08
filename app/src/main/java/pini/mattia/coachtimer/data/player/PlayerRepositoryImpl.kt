@@ -19,7 +19,7 @@ class PlayerRepositoryImpl @Inject constructor(
                     playerService.getPlayers().getOrThrow().results
                         .also {
                             // save players to dao
-                            // in a real situation wi should check for fresh data every time
+                            // in a real situation we should check for fresh data every time
                             playerDao.addPlayers(it)
                         }.map { playerDto ->
                             playerMapper.mapTo(playerDto)
