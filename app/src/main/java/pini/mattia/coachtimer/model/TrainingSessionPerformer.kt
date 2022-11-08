@@ -29,7 +29,8 @@ class TrainingSessionPerformer @Inject constructor(
     private var lastLapMillis = 0L
 
     private lateinit var watchJob: Job
-    private var sessionStatus = SessionStatus.UNITIALIZED
+    var sessionStatus = SessionStatus.UNITIALIZED
+        private set
 
     fun initializeSession(
         player: Player,

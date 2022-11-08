@@ -43,6 +43,10 @@ object FrameworkLibs {
         const val composeUiTooling = "androidx.compose.ui:ui-tooling:$version"
         const val composeNavigation = "androidx.navigation:navigation-compose:2.5.1"
         const val composeAnimation = "androidx.compose.animation:animation:1.3.0"
+
+        // Paging Compose
+        const val accompanistPager = "com.google.accompanist:accompanist-pager:0.27.0"
+        const val accompanistPagerIndicator = "com.google.accompanist:accompanist-pager-indicators:0.27.0"
     }
 
     object Dagger {

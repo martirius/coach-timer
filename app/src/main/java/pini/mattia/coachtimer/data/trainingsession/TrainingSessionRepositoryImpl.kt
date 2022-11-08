@@ -14,7 +14,7 @@ class TrainingSessionRepositoryImpl @Inject constructor() : TrainingSessionRepos
         return _trainingSessions
     }
 
-    override suspend fun addTrainingSession(trainingSession: TrainingSession) {
-        _trainingSessions.emit(_trainingSessions.value.toMutableList().apply { add(trainingSession) })
+    override fun addTrainingSession(trainingSession: TrainingSession) {
+        _trainingSessions.tryEmit(_trainingSessions.value.toMutableList().apply { add(trainingSession) })
     }
 }

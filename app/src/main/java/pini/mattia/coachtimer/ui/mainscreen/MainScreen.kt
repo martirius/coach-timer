@@ -52,14 +52,44 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.skydoves.landscapist.glide.GlideImage
+import pini.mattia.coachtimer.Destinations
 import pini.mattia.coachtimer.R
 import pini.mattia.coachtimer.model.player.Picture
 import pini.mattia.coachtimer.model.player.Player
+import pini.mattia.coachtimer.ui.sessionscreen.SessionScreen
 import pini.mattia.coachtimer.ui.theme.CoachTimerTheme
 
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = Destinations.MAIN_SCREEN) {
+        composable(Destinations.MAIN_SCREEN) {
+            MainScreen(navController)
+        }
+        composable(
+            Destinations.SESSION_SCREEN,
+            arguments = listOf(
+                navArgument("playerId") {
+                    type = NavType.StringType
+                },
+                navArgument("lapDistance") {
+                    type = NavType.IntType
+                }
+            )
+        ) {
+            SessionScreen(navController = navController)
+        }
+    }
+}
+
+@Composable
+private fun MainScreen(navController: NavController) {
     val launchedEffectKey = remember {
         "key"
     }

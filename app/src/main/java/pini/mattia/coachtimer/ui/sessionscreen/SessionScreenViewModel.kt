@@ -79,7 +79,9 @@ class SessionScreenViewModel @Inject constructor(
         return PerformancesUI(
             numberOfLaps = trainingSession.laps.size.toString(),
             maxSpeed = "%.2f m/s".format(trainingSession.calculateMaxSpeed()),
-            lapsFormatted = trainingSession.laps.mapIndexed { index, lap -> "%02d: ${lap.lapTime}".format(index + 1) },
+            lapsFormatted = trainingSession.laps.mapIndexed { index, lap ->
+                "%02d: ${lap.lapTime}".format(index + 1)
+            },
             laps = trainingSession.laps.map { it.lapTime },
             averageSpeed = "%.2f m/s".format(trainingSession.calculateAverageSpeed()),
             averageLapTimeFormatted = formatElapsedTime(trainingSession.calculateAverageLapTime()),
@@ -97,6 +99,21 @@ class SessionScreenViewModel @Inject constructor(
 
     fun stopSession() {
         trainingSessionPerformer.stop()
+    }
+
+    fun saveSession() {
+        if (trainingSessionPerformer.sessionStatus == TrainingSessionPerformer.SessionStatus.PERFORMING ||
+            trainingSessionPerformer.sessionStatus == TrainingSessionPerformer.SessionStatus.STOPPED
+        ) {
+            trainingSessionPerformer.stop()
+            viewModelScope.launch {
+                trainingSessionPerformer.onGoingTrainingSession.value?.let {
+                    trainingSessionRepository.addTrainingSession(
+                        it
+                    )
+                }
+            }
+        }
     }
 
     data class ViewState(

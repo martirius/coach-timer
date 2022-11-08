@@ -81,6 +81,8 @@ dependencies {
     implementation(FrameworkLibs.Compose.composeUiTooling)
     implementation(FrameworkLibs.Compose.composeNavigation)
     implementation(FrameworkLibs.Compose.composeAnimation)
+    implementation(FrameworkLibs.Compose.accompanistPager)
+    implementation(FrameworkLibs.Compose.accompanistPagerIndicator)
 
     // Tests
     testImplementation(TestLibs.junit)

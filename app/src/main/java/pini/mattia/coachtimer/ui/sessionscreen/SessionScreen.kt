@@ -1,5 +1,6 @@
 package pini.mattia.coachtimer.ui.sessionscreen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,6 +51,7 @@ import pini.mattia.coachtimer.ui.customcomposables.MultiFabItem
 import pini.mattia.coachtimer.ui.customcomposables.MultiFabState
 import pini.mattia.coachtimer.ui.customcomposables.MultiFloatingActionButton
 import pini.mattia.coachtimer.ui.mainscreen.MainScreenViewModel
+import pini.mattia.coachtimer.ui.theme.CoachTimerTheme
 import pini.mattia.coachtimer.ui.theme.stopWatchDisplay
 import pini.mattia.coachtimer.ui.theme.stopwatchFontRegular
 
@@ -61,105 +63,118 @@ fun SessionScreen(navController: NavController) {
     val fabState = remember {
         mutableStateOf(MultiFabState.COLLAPSED)
     }
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.LightGray),
-                title = {
-                    Text(text = "Training session")
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(imageVector = Icons.Filled.Close, contentDescription = "Back")
-                    }
-                }
-            )
-        },
-        floatingActionButton = {
-            MultiFloatingActionButton(
-                fabIcon = Icons.Filled.ArrowDropDown,
-                items = if (viewState.trainingSession != null) listOf(
-
-                    MultiFabItem(
-                        "Stop",
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_stop_24),
-                                contentDescription = "Lap icon",
-                                modifier = Modifier.size(24.dp)
-                            )
-                        },
-                        viewState.trainingSession!!.isSessionStarted,
-                        onFabClick = viewModel::stopSession
-                    ),
-                    MultiFabItem(
-                        "Lap",
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_lap_time_24),
-                                contentDescription = "Lap icon",
-                                modifier = Modifier.size(24.dp)
-                            )
-                        },
-                        viewState.trainingSession!!.isSessionStarted,
-                        onFabClick = viewModel::addLap
-                    ),
-                    MultiFabItem(
-                        "Start!",
-                        {
-                            Icon(
-                                imageVector = Icons.Filled.PlayArrow,
-                                contentDescription = "Start icon",
-                                modifier = Modifier.size(24.dp)
-                            )
-                        },
-                        !viewState.trainingSession!!.isSessionStarted,
-                        onFabClick = viewModel::startSession
-                    )
-                ) else emptyList(),
-                toState = fabState.value,
-                stateChanged = { newFabState -> fabState.value = newFabState }
-            )
-        }
-    ) {
-        Column(
-            Modifier
-                .padding(it)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            when (viewState.status) {
-                MainScreenViewModel.Status.LOADING -> {}
-                MainScreenViewModel.Status.FAILED -> {}
-                MainScreenViewModel.Status.SUCCESS -> {
-                    val trainingSessionUI = viewState.trainingSession!!
-                    Column(
-                        modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState())
-                    ) {
-                        PlayerComposable(
-                            imageUrl = trainingSessionUI.player.picture.medium,
-                            title = trainingSessionUI.player.title,
-                            name = trainingSessionUI.player.name,
-                            surname = trainingSessionUI.player.surname
-                        )
-                        WatchComposable(
-                            currentTime = trainingSessionUI.formattedElapsedTime
-                        )
-                        PerformancesComposable(performances = trainingSessionUI.performancesUI)
-
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(text = "Lap times graph(millis)", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+    CoachTimerTheme {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.LightGray),
+                    title = {
+                        Text(text = "Training session")
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            viewModel.saveSession()
+                            navController.popBackStack()
+                        }) {
+                            Icon(imageVector = Icons.Filled.Close, contentDescription = "Back")
                         }
-                        Graph(
-                            modifier = Modifier,
-                            values = trainingSessionUI.performancesUI.laps,
-                            trainingSessionUI.performancesUI.averageLapTime
+                    }
+                )
+            },
+            floatingActionButton = {
+                MultiFloatingActionButton(
+                    fabIcon = Icons.Filled.ArrowDropDown,
+                    items = if (viewState.trainingSession != null) listOf(
+
+                        MultiFabItem(
+                            "Stop",
+                            {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_stop_24),
+                                    contentDescription = "Lap icon",
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            },
+                            viewState.trainingSession!!.isSessionStarted,
+                            onFabClick = viewModel::stopSession
+                        ),
+                        MultiFabItem(
+                            "Lap",
+                            {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_lap_time_24),
+                                    contentDescription = "Lap icon",
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            },
+                            viewState.trainingSession!!.isSessionStarted,
+                            onFabClick = viewModel::addLap
+                        ),
+                        MultiFabItem(
+                            "Start!",
+                            {
+                                Icon(
+                                    imageVector = Icons.Filled.PlayArrow,
+                                    contentDescription = "Start icon",
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            },
+                            !viewState.trainingSession!!.isSessionStarted,
+                            onFabClick = viewModel::startSession
                         )
-                        // add some bottom space for readability
-                        Spacer(modifier = Modifier.height(64.dp))
+                    ) else emptyList(),
+                    toState = fabState.value,
+                    stateChanged = { newFabState -> fabState.value = newFabState }
+                )
+            }
+        ) {
+            Column(
+                Modifier
+                    .padding(it)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                when (viewState.status) {
+                    MainScreenViewModel.Status.LOADING -> {}
+                    MainScreenViewModel.Status.FAILED -> {}
+                    MainScreenViewModel.Status.SUCCESS -> {
+                        val trainingSessionUI = viewState.trainingSession!!
+                        BackHandler(true) {
+                            viewModel.saveSession()
+                            navController.popBackStack()
+                        }
+                        Column(
+                            modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState())
+                        ) {
+                            PlayerComposable(
+                                imageUrl = trainingSessionUI.player.picture.medium,
+                                title = trainingSessionUI.player.title,
+                                name = trainingSessionUI.player.name,
+                                surname = trainingSessionUI.player.surname
+                            )
+                            WatchComposable(
+                                currentTime = trainingSessionUI.formattedElapsedTime
+                            )
+                            PerformancesComposable(performances = trainingSessionUI.performancesUI)
+
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "Lap times graph(millis)",
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                            Graph(
+                                modifier = Modifier,
+                                values = trainingSessionUI.performancesUI.laps,
+                                trainingSessionUI.performancesUI.averageLapTime
+                            )
+                            // add some bottom space for readability
+                            Spacer(modifier = Modifier.height(64.dp))
+                        }
                     }
                 }
             }
