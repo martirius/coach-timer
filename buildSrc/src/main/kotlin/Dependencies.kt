@@ -91,4 +91,11 @@ object ExternalLibs {
     object Landscapist {
         const val glide = "com.github.skydoves:landscapist-glide:2.0.3"
     }
+
+    object Room {
+        private const val version = "2.4.3"
+        const val runtime = "androidx.room:room-runtime:$version"
+        const val annotation = "androidx.room:room-compiler:$version"
+        const val ktx = "androidx.room:room-ktx:$version"
+    }
 }

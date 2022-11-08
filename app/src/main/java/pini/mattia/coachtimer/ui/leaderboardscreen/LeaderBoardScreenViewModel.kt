@@ -45,6 +45,9 @@ class LeaderBoardScreenViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Set filter selected and apply it to TrainingSession list
+     */
     fun setFilter(filter: TrainingSessionFilter) {
         _viewState.tryEmit(
             ViewState(

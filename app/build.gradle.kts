@@ -103,4 +103,9 @@ dependencies {
 
     implementation(ExternalLibs.kotlinxSerialization)
     implementation(ExternalLibs.Landscapist.glide)
+
+    // Room
+    implementation(ExternalLibs.Room.runtime)
+    kapt(ExternalLibs.Room.annotation)
+    implementation(ExternalLibs.Room.ktx)
 }

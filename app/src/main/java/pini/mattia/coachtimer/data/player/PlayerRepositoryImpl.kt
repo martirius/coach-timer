@@ -8,13 +8,27 @@ import javax.inject.Inject
 
 class PlayerRepositoryImpl @Inject constructor(
     private val playerService: PlayerService,
-    private val playerMapper: PlayerMapper
+    private val playerMapper: PlayerMapper,
+    private val playerDao: PlayerDao
 ) : PlayersRepository {
     override suspend fun getPlayers(): Result<List<Player>> {
         return withContext(Dispatchers.IO) {
             kotlin.runCatching {
-                val playersResponse = playerService.getPlayers().getOrThrow()
-                playersResponse.results.map { playerDto -> playerMapper.mapTo(playerDto) }
+                val playersSaved = playerDao.getPlayers()
+                if (playersSaved.isEmpty()) {
+                    playerService.getPlayers().getOrThrow().results
+                        .also {
+                            // save players to dao
+                            // in a real situation wi should check for fresh data every time
+                            playerDao.addPlayers(it)
+                        }.map { playerDto ->
+                            playerMapper.mapTo(playerDto)
+                        }
+                } else {
+                    playersSaved.map { playerDto ->
+                        playerMapper.mapTo(playerDto)
+                    }
+                }
             }
         }
     }

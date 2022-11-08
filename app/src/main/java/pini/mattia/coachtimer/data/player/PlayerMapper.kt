@@ -22,3 +22,20 @@ class PlayerMapper @Inject constructor() : Mapper<Player, PlayerDTO> {
         )
     }
 }
+
+class PlayerDTOMapper @Inject constructor() : Mapper<PlayerDTO, Player> {
+    override fun mapTo(objectToMap: Player): PlayerDTO {
+        return PlayerDTO(
+            PlayerName(
+                objectToMap.title,
+                objectToMap.name,
+                objectToMap.surname
+            ),
+            PictureDTO(
+                objectToMap.picture.thumbnail,
+                objectToMap.picture.large,
+                objectToMap.picture.medium
+            )
+        )
+    }
+}
