@@ -6,7 +6,7 @@ import kotlin.math.pow
 
 /**
  * Bonus feature to show case binary operator and operations
- * Using experimental UByteArray because if using signed byte array decoding fails because byte is signed
+ * Using experimental UByteArray because if using signed byte array decoding fails because byte is signed and or operator doesn't work
  */
 
 @OptIn(ExperimentalUnsignedTypes::class)
